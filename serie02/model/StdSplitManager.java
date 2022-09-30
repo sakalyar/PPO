@@ -16,18 +16,20 @@ import util.Contract;
 
 public class StdSplitManager implements SplitManager {
 
-	File f;
-	long sizeInOctects;
-	String path;
-	long n;
-	InputStream in;
-	OutputStream out;
+	private File f;
+	private long sizeInOctects;
+	private String path;
+	private long n;
+	private InputStream in;
+	private OutputStream out;
 	
-	long splitsSizes[];
-	long gSS;
-	long lg;
+	private long splitsSizes[];
+	private long gSS;
+	private long lg;
+	private int off;
+	private int len;
 	
-	long sizesArray[];
+	private long sizesArray[];
 	
 	public StdSplitManager() {
 		f = getFile();
@@ -71,7 +73,6 @@ public class StdSplitManager implements SplitManager {
 		int m = (int) Math.max(
 				1, Math.ceil((double) getFile().length() / MIN_FRAGMENT_SIZE));
 		return Math.min(MAX_FRAGMENT_NB, m);
-		//return 0;
 	}
 
 	@Override
@@ -182,19 +183,9 @@ public class StdSplitManager implements SplitManager {
 	}
 
 	
-	public void dummy() {
-		f = getFile();
-		in = null;
-		out = null;
-		
-	}
-	
-	
-	@Override
-	public void split() throws IOException {
-		// TODO Auto-generated method stub
-		
+	public void firstMethod() throws IOException {
 		if (canSplit()) {
+			setSplitsSizes(n);
 			// premiere maniere ??
 			f = getFile();
 			in = null;
@@ -219,16 +210,67 @@ public class StdSplitManager implements SplitManager {
 				ioe.printStackTrace();
 			}
 			finally {
-				try {
 				if (in != null)
 					in.close();
-				} catch(IOException ioe) {
-					ioe.printStackTrace();
+				} 
+			}
+		}
+	
+	
+	@Override
+	public void split() throws IOException {
+		// TODO Auto-generated method stub
+		if (canSplit()) {
+			// deuxieme maniere ??
+			f = getFile();
+			in = null;
+			out = null;
+			int s = sizesArray.length;
+			try {
+				in = new BufferedInputStream(new FileInputStream(f));
+				for (int i = 0; i < s; ++i) {
+					String name = f.getAbsolutePath() + "." + (i+1);
+					out = new BufferedOutputStream(new FileOutputStream(name));
+					for (long j = 0, k = sizesArray[i]; j < k; j++)
+						out.write(in.read());
+					out.close();
 				}
 			}
-			
+			catch(IOException ioe) {
+				ioe.printStackTrace();
+			}
+			finally {
+				if (in != null)
+					in.close();
+			}
+		}
+	}
+	
+	public void thirdMethod() throws IOException {
+		if (canSplit()) {
+			// premiere maniere ??
+			f = getFile();
+			in = null;
+			out = null;
+			int s = sizesArray.length;
+			try {
+				in = new BufferedInputStream(new FileInputStream(f));
+				for (int i = 0; i < s; ++i) {
+					String name = f.getAbsolutePath() + "." + (i+1);
+					out = new BufferedOutputStream(new FileOutputStream(name));
+					for (long j = 0, k = sizesArray[i]; j < k; j++)
+						out.write(in.read());
+					out.close();
+				}
+			}
+			catch(IOException ioe) {
+				ioe.printStackTrace();
+			}
+			finally {
+				if (in != null)
+					in.close();
+			}
 			//deuxieme maniere
 		}
 	}
-
 }
