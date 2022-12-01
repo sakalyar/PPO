@@ -1,24 +1,26 @@
 package serie06;
 
+import java.util.HashMap;
+
 public enum DrinkTypes {
-	COFFEE("COFFEE", 30),
-	CHOCOLATE("CHOCOLATE", 45),
-	ORANGE_JUICE("ORANGE_JUICE", 110);
+	COFFEE (30), 
+	CHOCOLATE (45),
+	ORANGE_JUICE (110);
 	
-	String name;
-	private int price;
-	private DrinkTypes(String name, int price) {
-		this.name = name;
+	private DrinkTypes(int price) {
 		this.price = price;
 	}
 	
-	int getPrice() {
+	private int price;
+	private String DrinkName;
+	
+	public int getPrice() {
 		return price;
 	}
-	
 	@Override
 	public String toString() {
-		return name.toLowerCase().replace('_', ' ');
+		System.out.println(this.name().replace("_", " ").toLowerCase());
+		return this.name().replace("_", " ").toLowerCase();
 	}
 	
 }

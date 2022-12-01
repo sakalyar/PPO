@@ -24,14 +24,8 @@ public class StdSwellingModel extends Observable implements SwellingModel {
 	
 	private Dimension dim;
 	
-	public StdSwellingModel(int w, int h) {
-		dim = new Dimension(w, h);
-		this.w = w;
-		this.h = h;
-	}
-	
 	public StdSwellingModel() {
-		setCurrent(new Dimension(0, 0));
+		dim = new Dimension(0, 0);
 	}
 	
 	@Override
@@ -53,7 +47,6 @@ public class StdSwellingModel extends Observable implements SwellingModel {
 		return false;
 	}
 
-	//Retravailler
 	@Override
 	public boolean isValidScaleFactor(double f) {
 		if (f >= MIN_FACTOR) {
@@ -66,7 +59,6 @@ public class StdSwellingModel extends Observable implements SwellingModel {
 	public Dimension max() {
 		return new Dimension(max, max);
 	}
-
 
 	@Override
 	public Dimension min() {
@@ -95,6 +87,5 @@ public class StdSwellingModel extends Observable implements SwellingModel {
 	public void setMin(Dimension d) {
 		min = d.height;
 	}
-
 
 }

@@ -1,59 +1,38 @@
 package serie06;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public enum CoinTypes {
-	ONE(1),
-	TWO(2),
-	FIVE(5),
-	TEN(10), 
-	TWENTY(20), 
-	FIFTY(50),
-	ONE_HUNDRED(100),
-	TWO_HUNDRED(200);
+	ONE (1),
+	TWO (2),
+	FIVE (5),
+	TEN (10),
+	TWENTY (20),
+	FIFTY (50),
+	ONE_HUNDRED (100),
+	TWO_HUNDRED (200);
 	
-	private int val;
+	int val;
+	private static CoinTypes[] coins = CoinTypes.values();
+	
 	private CoinTypes(int val) {
 		this.val = val;
 	}
 	
-	List<Integer> nums = new ArrayList<Integer>() {{
-		add(1);
-		add(2);
-		add(5);
-		add(10);
-		add(20);
-		add(50);
-		add(100);
-		add(200);
-	}};
-	Map<Integer, CoinTypes> m = new HashMap<Integer, CoinTypes>() {{
-		put(1, ONE);
-		put(2, TWO);
-		put(5, FIVE);
-		put(10, TEN);
-		put(20, TWENTY);
-		put(50, FIFTY);
-		put(100, ONE_HUNDRED);
-		put(200, TWO_HUNDRED);
-	}};
-	
 	public int getFaceValue() {
-		return this.val;
+		return val;
 	}
-	
+
 	@Override
 	public String toString() {
 		if (val == 1) return "1 ct";
 		return val + " cts";
+		
 	}
 	
-	public static CoinTypes getCoinType(int val)
-	{
-		System.out.println(val);
+	public static CoinTypes getCoinType(int val) {
 		if (val == 1) return ONE;
 		if (val == 2) return TWO;
 		if (val == 5) return FIVE;
@@ -64,5 +43,82 @@ public enum CoinTypes {
 		if (val == 200) return TWO_HUNDRED;
 		return null;
 	}
-}
+	
+};
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*package serie06;
+
+public enum CoinTypes {
+	ONE { 
+		public int getFaceValue() {
+				return 1;
+			}
+		},
+	TWO { 
+		public int getFaceValue() {
+			return 2;
+		}
+		},
+	FIVE{ 
+		public int getFaceValue() {
+			return 5;
+		}
+	},
+	TEN{ 
+		public int getFaceValue() {
+			return 10;
+		}
+	},
+	TWENTY{ 
+		public int getFaceValue() {
+			return 20;
+		}
+	},
+	FIFTY{ 
+		public int getFaceValue() {
+			return 50;
+		}
+	},
+	ONE_HUNDRED{ val
+		public int getFaceValue() {
+			return 100;
+		}
+	},
+	TWO_HUNDRED{ 
+		public int getFaceValue() {
+			return 1;
+		}
+	};
+	
+	int val;
+	
+	public CoinTypes() {
+		
+	}
+	
+	@Override
+	public String toString() {
+		return CoinTypes.valueOf(this).ordinal();
+	}
+	
+	public static CoinTypes getCoinType(int val) {
+		return CoinTypes.values()[val];
+	}
+	
+};
+*/

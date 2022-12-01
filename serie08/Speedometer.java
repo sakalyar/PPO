@@ -1,7 +1,6 @@
 package serie08;
 
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,23 +15,21 @@ import javax.swing.JRadioButton;
 import javax.swing.SwingUtilities;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import serie07.Swelling;
-import serie08.SpeedometerModel.SpeedUnit;
 
 public class Speedometer extends Observable {
 
 	private JFrame mainFrame;
 	private SpeedometerModel model;
-	private JRadioButton radioSpeed1;
-	private JRadioButton radioSpeed2;
-	private JButton slower;
-	private JButton faster;
-	private JButton turnOnOff;
-	private ButtonGroup radioButtonGroup;
-	private ButtonGroup buttonGroup;
+	private JRadioButton radioButton1;
+	private JRadioButton radioButton2;
+	private JButton button1;
+	private JButton button2;
+	private JButton button3;
+	private ButtonGroup group1;
+	private ButtonGroup group2;
 	private GraphicSpeedometer speedometer;
 	
 	public Speedometer() {
@@ -48,6 +45,7 @@ public class Speedometer extends Observable {
 		mainFrame.pack();
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.setVisible(true);
+		JFrame wa = new JFrame();
 		
 	}
 	
@@ -56,30 +54,21 @@ public class Speedometer extends Observable {
 	}
 	
 	void createView() {
-		int frameWidth = 450;
+		int frameWidth = 300;
 		int frameHeight = 300;
 		
 		mainFrame = new JFrame("Speedometer");
 		mainFrame.setPreferredSize(new Dimension(frameWidth, frameHeight));
 		
-		radioButtonGroup = new ButtonGroup();
-		buttonGroup = new ButtonGroup();
-		
-		radioSpeed1 = new JRadioButton("km / h");
-		radioSpeed2 = new JRadioButton("mi / h");
-		radioButtonGroup.add(radioSpeed1);
-		radioButtonGroup.add(radioSpeed2);
-		
-		radioSpeed2.setSelected(true);
-		slower = new JButton("-");
-		faster = new JButton("+");
-		turnOnOff = new JButton("TURN ON");
-		buttonGroup.add(slower);
-		buttonGroup.add(faster);
-		buttonGroup.add(turnOnOff);
+		radioButton1 = new JRadioButton("km / h");
+		radioButton2 = new JRadioButton("mi / h");
+		button1 = new JButton("-");
+		button2 = new JButton("+");
+		button3 = new JButton("TURN OFF");
+		ButtonGroup group1 = new ButtonGroup();
+		ButtonGroup group2 = new ButtonGroup();
 		
 		speedometer = new GraphicSpeedometer();
-		speedometer.repaint();
 	}
 	
 	void placeComponents() {
@@ -90,8 +79,8 @@ public class Speedometer extends Observable {
 				JPanel h = new JPanel(new GridLayout(0, 1));
 				{
 					//--
-					h.add(radioSpeed1);
-					h.add(radioSpeed2);
+					h.add(radioButton1);
+					h.add(radioButton2);
 				} //--
 				q.add(h);
 			} //--
@@ -100,15 +89,15 @@ public class Speedometer extends Observable {
 			{ //--
 				JPanel h2 = new JPanel(new GridLayout(1, 0));
 				{ //--
-					h2.add(slower);
-					h2.add(faster);
+					h2.add(button1);
+					h2.add(button2);
 				} //--
 				q2.add(h2);
 			} //--
 			p.add(q2);
 			JPanel q3  = new JPanel();
 			{ //--
-				q3.add(turnOnOff);
+				q3.add(button3);
 			} //--
 			p.add(q3);
 		} //--
@@ -118,7 +107,7 @@ public class Speedometer extends Observable {
 	}
 	
 	void createController() {
-mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         ((Observable) model).addObserver(new Observer() {
             @Override
@@ -127,53 +116,17 @@ mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             }
         });
 
-        slower.addActionListener(new ActionListener() {
+        button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 speedometer.test();
             }
         });
-        
-        radioSpeed1.addActionListener(new ActionListener() {
-        	@Override
-        	public void actionPerformed(ActionEvent e) {
-        		System.out.println("Old one: " + model.getUnit());
-        		model.setUnit(SpeedUnit.KMH);
-        		System.out.println("New one: " + model.getUnit());
-        		System.out.println();
-        	}
-        });
-        
-        radioSpeed2.addActionListener(new ActionListener() {
-        	@Override
-        	public void actionPerformed(ActionEvent e) {
-        		System.out.println("Old one: " + model.getUnit());
-        		model.setUnit(SpeedUnit.MIH);
-        		System.out.println("New one: " + model.getUnit());
-        		System.out.println();
-        	}
-        });
-        
-        turnOnOff.addActionListener(new ActionListener() {
-        	@Override
-        	public void actionPerformed(ActionEvent e) {
-        		if (model.isOn()) {
-        			System.out.println("CLICKED");
-        			turnOnOff.setText("TURN ON");
-        			model.turnOff();
-        		} else {
-        			turnOnOff.setText("TURN OFF");
-        			model.turnOn();
-        		}
-        	}
-        });
-        
 	}
 	
-	private void refresh() {
-		System.out.println("CHANGED");
+	void refresh() {
 		Container contentPane = mainFrame.getContentPane();
-		contentPane.setBackground(Color.GREEN);
+		
 	}
 	
 	public static void main(String[] args) {

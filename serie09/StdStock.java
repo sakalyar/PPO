@@ -2,83 +2,79 @@ package serie09;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+
+import util.Contract;
 
 public class StdStock<E> implements Stock<E> {
 
-	private Map<E, Integer> m;
-	
-	public StdStock() {
-		m = new HashMap<E, Integer>();
-	}
-	
-	@Override
-	public int getNumber(E e) {
-		if (m.get(e) == null) return 0;
-		return m.get(e);
-	}
+    // ATTRIBUTS
 
-	@Override
-	public int getTotalNumber() {
-		return m.size();
-	}
+    private Map<E, Integer> data;
 
-	@Override
-	public void addElement(E e) {
-		if (e == null) return;
-		if (m.get(e) == null) {
-			m.put(e, 1);
-			return;
-		}
-		int am = m.get(e);
-		removeElement(e);
-		am++;
-		m.put(e, am);
-	}
+    // CONSTRUCTEURS
+    public StdStock() {
+        data = new HashMap<E, Integer>();
+    }
 
-	@Override
-	public void addElement(E e, int qty) {
-		if (e == null || qty <= 0) return;
-		if (m.get(e) == null || m.get(e) == 0) m.put(e, qty);
-		else {
-			while(qty-- > 0) {
-				addElement(e);
-			}
-		}
-	}
+    // REQUETES
 
-	@Override
-	public void removeElement(E e) {
-		if (e != null && m.get(e) >= 1) {
-			int am = m.get(e);
-			am--;
-//			System.out.println();
-//			System.out.println(m);
-			m.remove(e);
-			if (am == 0) return;
-			m.put(e, am);
-//			System.out.println(m);
+    @Override
+    public int getNumber(E e) {
+        Contract.checkCondition(e != null);
+        if (!data.containsKey(e)) {
+            return 0;
+        }
+        return data.get(e);
+    }
+    
+    @Override
+    public int getTotalNumber() {
+        int nb = 0;
+        System.out.println();
+        for (E e:data.keySet()) {
+            nb += data.get(e);
+        }
+        
+        return nb;
+    }
 
-		}
-	}
+    // COMMANDES
 
-	@Override
-	public void removeElement(E e, int qty) {
-		if (e != null && qty > 0 && m.get(e) >= qty) {
-			if (m.get(e) <= qty) {
-				m.remove(e);
-				return;
-			}
-			while(qty-- > 0) {
-				removeElement(e);
-			}
-		}
-	}
+    @Override
+    public void addElement(E e) {
+        Contract.checkCondition(e != null);
+        System.out.println(getNumber(e));
+        data.put(e, getNumber(e) + 1);
+    }
 
-	@Override
-	public void reset() {
-		m = new HashMap<E, Integer>();
-	}
+    @Override
+    public void addElement(E e, int qty) {
+        Contract.checkCondition(e != null);
+        Contract.checkCondition(qty > 0);
 
+        data.put(e, getNumber(e) + qty);
+    }
+
+    @Override
+    public void removeElement(E e) {
+        Contract.checkCondition(e != null);
+        Contract.checkCondition(getNumber(e) >= 1);
+
+        data.put(e, getNumber(e) - 1);
+    }
+
+    @Override
+    public void removeElement(E e, int qty) {
+        Contract.checkCondition(e != null);
+        Contract.checkCondition(qty > 0);
+        Contract.checkCondition(getNumber(e) >= qty);
+
+        data.put(e, getNumber(e) - qty);
+    }
+
+    @Override
+    public void reset() {
+        data = new HashMap<E, Integer>();
+    }
 
 }

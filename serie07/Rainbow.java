@@ -85,7 +85,6 @@ public class Rainbow {
     }
     
     private void refresh() {
-    	System.out.println("TESTTTT");
         Container contentPane = mainFrame.getContentPane();
         contentPane.setBackground(model.getColor());
     }

@@ -1,91 +1,110 @@
 package serie09;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import util.Contract;
 
 public class StdMoneyAmount extends StdStock<CoinTypes> implements MoneyAmount {
 
-	private StdStock<CoinTypes> stock;
-	int credit;
-	int p[];
-	int x[];
-	List<Integer> n;
-	
-	public StdMoneyAmount() {
-		stock = new StdStock<CoinTypes>();
-		int p[] = {1, 2, 5, 10, 20, 50, 100, 200};
-		this.p = p;
-		x = new int[8];
-		n = new ArrayList<Integer>(8);
-	}
-	
-	public StdMoneyAmount(StdStock<CoinTypes> stock, int x[]) {
-		this.stock = stock;
-		stock = new StdStock<CoinTypes>();
-		int p[] = {1, 2, 5, 10, 20, 50, 100, 200};
-		this.p = p;
-		this.x = x;
-		credit = 0;
-		n = new ArrayList<Integer>(8);
-	}
+    // REQUETES
 
-	@Override
-	public int getValue(CoinTypes c) {
-		return stock.getNumber(c) * c.getFaceValue();
-	}
+    @Override
+    public int getValue(CoinTypes c) {
+        Contract.checkCondition(c != null);
 
-	@Override
-	public int getTotalValue() {
-		return credit;
-	}
+        return getNumber(c) * c.getFaceValue();
+    }
 
-	@Override
-	public void addAmount(MoneyAmount amount) {
-		if (amount != null) {
-			for (CoinTypes types : CoinTypes.values()) {
-				stock.addElement(types, stock.getNumber(types) + 
-						amount.getValue(types) / types.getFaceValue());
-			}
-		}
-	}
+    @Override
+    public int getTotalValue() {
+        int total = 0;
+        for (CoinTypes c:CoinTypes.values()) {
+            total += getValue(c);
+        }
+        return total;
+    }
 
-	@Override
-	public MoneyAmount computeChange(int s) {
-		if (s > 0) {
-			StdStock<CoinTypes> newStock = new StdStock<CoinTypes>();
-			for (CoinTypes types : CoinTypes.values()) {
-				n.add(stock.getNumber(types));
-			}
-			int i = 8;
-			int q;
-			while (i >= 0 && s > 0) {
-				i--;
-				q = Math.min((int) n.get(i), (int) s / p[i]);
-				s -= q * p[i];
-				x[i] = q;
-			}
-			int j = 0;
-			for (CoinTypes types : CoinTypes.values()) {
-				newStock.addElement(types, x[j++]);
-			}
-			StdMoneyAmount change = new StdMoneyAmount(newStock, x);
-			return change;
-		}
-			
-		return null;
-	}
+    // COMMANDES
 
-	@Override
-	public void removeAmount(MoneyAmount amount) {
-		if (amount != null) {
-			for (CoinTypes types : CoinTypes.values()) {
-				if (stock.getNumber(types) < amount.getNumber(types)) return;
-			}
-			for (CoinTypes types : CoinTypes.values()) {
-				stock.removeElement(types, amount.getNumber(types));
-			}
-		}
-	}
+    @Override
+    public void addAmount(MoneyAmount amount) {
+        Contract.checkCondition(amount != null);
+
+        for (CoinTypes c:CoinTypes.values()) {
+            int qty = amount.getNumber(c);
+            if (qty > 0) {
+                addElement(c, qty);
+            }
+        }
+    }
+
+    @Override
+    public MoneyAmount computeChange(int s) {
+        Contract.checkCondition(s > 0);
+
+        MoneyAmount left = new StdMoneyAmount();
+        left.addAmount(this);
+        for (CoinTypes c:CoinTypes.values()) {
+            if (c.getFaceValue() > s && left.getNumber(c) > 0) {
+                left.removeElement(c, left.getNumber(c));
+            }
+        }
+        if (left.getTotalValue() >= s) {
+            MoneyAmount res = new StdMoneyAmount();
+            res = backtracking(left, res, s);
+            if (res != null) {
+                return res;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void removeAmount(MoneyAmount amount) {
+        Contract.checkCondition(amount != null);
+
+        for (CoinTypes c:CoinTypes.values()) {
+            Contract.checkCondition(this.getNumber(c) >= amount.getNumber(c));
+        }
+        for (CoinTypes c:CoinTypes.values()) {
+            int qty = amount.getNumber(c);
+            if (qty > 0) {
+                this.removeElement(c, qty);
+            }
+        }
+    }
+
+    // OUTILS
+
+    private MoneyAmount backtracking(MoneyAmount left, MoneyAmount res, int s) {
+        if (left.getTotalNumber() == 0) {
+            return null;
+        }
+        for (int i = CoinTypes.values().length - 1; i >= 0; i--) {
+            CoinTypes c = CoinTypes.values()[i];
+            if (left.getNumber(c) > 0) {
+                if (res.getTotalValue() + c.getFaceValue() == s) {
+                    res.addElement(c);
+                    return res;
+                }
+                if (res.getTotalValue() + c.getFaceValue() < s) {
+                    left.removeElement(c);
+                    res.addElement(c);
+                    MoneyAmount resultat = backtracking(left, res, s);
+                    if (resultat != null) {
+                        return resultat;
+                    }
+                    left.addElement(c);
+                    res.removeElement(c);
+                }
+                MoneyAmount tmp = new StdMoneyAmount();
+                tmp.addAmount(left);
+                left = tmp;
+                left.removeElement(c, left.getNumber(c));
+                if (left.getTotalValue() + res.getTotalValue() < s) {
+                    return null;
+                }
+            }
+        }
+        return null;
+    }
 
 }

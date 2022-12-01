@@ -2,62 +2,51 @@ package serie06;
 
 public class StdDrinksMachineModel implements DrinksMachineModel {
 
-	private StdStock<DrinkTypes> drinksStock;
-	private StdMoneyAmount cashbox;
-	private DrinkTypes lastDrink;
-	private StdMoneyAmount credit;
-	private StdMoneyAmount change;
-	
-	public StdDrinksMachineModel() {
-		drinksStock = new StdStock<DrinkTypes>();
-		credit = new StdMoneyAmount();
-		cashbox = new StdMoneyAmount();
-		change = new StdMoneyAmount();
-	}
-	
 	@Override
 	public int getDrinkNb(DrinkTypes d) {
-		if (d != null)
-			return drinksStock.getNumber(d);
+		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public DrinkTypes getLastDrink() {
-		return lastDrink;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public int getCreditAmount() {
-		return credit.getTotalValue();
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
 	public int getCreditNb(CoinTypes c) {
-		return credit.getNumber(c);
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
 	public int getCashAmount() {
-		return credit.getTotalValue();
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
 	public int getCashNb(CoinTypes c) {
-		if (c != null)
-			return credit.getNumber(c);
+		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public int getChangeAmount() {
-		return change.getTotalValue();
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
 	public int getChangeNb(CoinTypes c) {
-		if (c != null)
-			return change.getNumber(c);
+		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -69,33 +58,25 @@ public class StdDrinksMachineModel implements DrinksMachineModel {
 
 	@Override
 	public void selectDrink(DrinkTypes d) {
-		boolean changeIsOK = canGetChange();
-		cashbox.addAmount(credit);
-		drinksStock.removeElement(d);
-		int value = credit.getValue(null);
-		if (value > d.getPrice() && changeIsOK) {
-//			int ma = cashbox.computeChange(value - d.getPrice());
-//			changebox.addAmount(ma);
-//			cashbox.removeAmount(ma);
-		}
-		reset();
-		lastDrink = d;
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	public void fillStock(DrinkTypes d, int q) {
-		int am = drinksStock.getNumber(d);
-		am += q;
-		drinksStock.addElement(d, am);
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	public void fillCash(CoinTypes c, int q) {
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void insertCoin(CoinTypes c) {
+		// TODO Auto-generated method stub
 		
 	}
 
@@ -122,6 +103,5 @@ public class StdDrinksMachineModel implements DrinksMachineModel {
 		// TODO Auto-generated method stub
 		
 	}
-
 
 }

@@ -1,7 +1,6 @@
 package serie06;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Modélise les stocks d'éléments.
@@ -16,9 +15,8 @@ import java.util.Map;
  *         getTotalNumber() == 0 </pre>
  */  
 public interface Stock<E> {
-    
     // REQUETES
-	
+    
     /**
      * Le nombre d'éléments de type <code>e</code> dans ce stock.
      * @pre <pre>
