@@ -202,15 +202,25 @@ public class Splitter {
 				if (result == JFileChooser.APPROVE_OPTION) {
 					File f = fileChooser.getSelectedFile();
 					System.out.println("Opening: " + f.getName() + ".\n");
+					model.changeFor(f);
+					model.setSplitsNumber(3);
+					System.out.println(model.getMaxFragmentNb());
+					System.out.println(model.getFile());
+//					try {
+//						
+////						model.split();
+//					} catch (IOException e1) {
+//						System.out.println("CRITICAL ERROR!!!");
+//					}
 					System.out.println("OK!");
 					try (BufferedReader reader = new BufferedReader (new FileReader (fileChooser.getSelectedFile()))) {
 						
-						StringBuilder resultStringBuilder = new StringBuilder();
-						String line;
-						while ((line = reader.readLine()) != null) {
-				            resultStringBuilder.append(line).append("\n");
-				        }
-						model.changeFor(null);
+//						StringBuilder resultStringBuilder = new StringBuilder();
+//						String line;
+//						while ((line = reader.readLine()) != null) {
+//				            resultStringBuilder.append(line).append("\n");
+//				        }
+//						model.changeFor(null);
 						System.out.println();
 //						System.out.println(resultStringBuilder);
 					} catch (IOException e1) {
